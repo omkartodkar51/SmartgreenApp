@@ -120,6 +120,7 @@
     login: "Login · Smart Green",
     otp: "Enter OTP · Smart Green",
     location: "Location · Smart Green",
+    hub: "Choose Journey · Smart Green",
     home: "Home · Smart Green",
     cart: "Your Cart · Smart Green",
     checkout: "Checkout · Smart Green",
@@ -212,7 +213,7 @@
     const [screen, tab] = raw.split("/");
     const allowed = Object.keys(TITLES);
     if (!allowed.includes(screen)) return false;
-    if (["home", "cart", "checkout", "nutri", "orders", "success"].includes(screen) && !(state.locationGranted && state.phone)) {
+    if (["hub", "home", "cart", "checkout", "nutri", "orders", "success"].includes(screen) && !(state.locationGranted && state.phone)) {
       state.screen = state.phone ? "location" : "login";
       return true;
     }
@@ -377,7 +378,7 @@
   }
 
   async function go(screen, opts = {}) {
-    const order = ["splash", "login", "otp", "location", "home", "cart", "checkout", "success", "nutri", "orders"];
+    const order = ["splash", "login", "otp", "location", "hub", "home", "cart", "checkout", "success", "nutri", "orders"];
     const from = order.indexOf(state.screen);
     const to = order.indexOf(screen);
     if (from >= 0 && to >= 0 && from !== to) state.navDir = to >= from ? 1 : -1;
@@ -394,13 +395,13 @@
     state.profileOpen = false;
     save();
     syncHash(!!opts.replaceHash);
-    if (["home", "cart", "checkout"].includes(screen) && !opts.silent) await showLoader(120);
+    if (["hub", "home", "cart", "checkout"].includes(screen) && !opts.silent) await showLoader(120);
     scheduleRender({ keepScroll: !!opts.keepScroll, focus: opts.focus, announce: !opts.keepScroll });
     if (!opts.keepScroll) window.scrollTo({ top: 0, behavior: "smooth" });
   }
 
   function navBar(active) {
-    const tabs = [["home", "Home", "home"], ["nutri", "Nutri-Tracker", "nutri"], ["orders", "My Orders", "orders"]];
+    const tabs = [["hub", "Hub", "home"], ["nutri", "Nutri-Tracker", "nutri"], ["orders", "My Orders", "orders"]];
     return `<nav class="bottom-nav" aria-label="Primary">${tabs.map(([id, label, ic]) => `
       <button type="button" class="nav-item ${active === id ? "active" : ""}" data-go="${id}" aria-current="${active === id ? "page" : "false"}">${icon(ic)}<span>${label}</span></button>`).join("")}</nav>`;
   }
@@ -541,16 +542,50 @@
     </section>`;
   }
 
-  function journeySwitcher() {
-    const idx = MODES.indexOf(state.homeTab);
-    return `<div class="journey-wrap">
-      <div class="journey-track" role="tablist" aria-label="Shopping journeys">
-        ${MODES.map((id) => `<button type="button" role="tab" aria-selected="${state.homeTab === id}" data-home-tab="${id}" data-focus="${id}" class="journey-btn ${state.homeTab === id ? "active" : ""}"><span>${MODE_META[id].label}</span></button>`).join("")}
+  function renderHub() {
+    return `<section class="screen with-nav px-5 pt-6 pb-12">
+      ${brandRow(true)}
+      <div class="mt-4 mb-5">
+        <h1 class="font-display text-2xl font-semibold">What would you like to plan?</h1>
+        <p class="mt-1 text-ink-mute font-semibold text-sm">Choose how you want to shop for your family today</p>
       </div>
-      <p class="journey-desc">${MODE_META[state.homeTab].desc}</p>
-      <div class="swipe-dots" aria-hidden="true">
-        ${MODES.map((_, i) => `<span class="dot ${i === idx ? "on" : ""}"></span>`).join("")}
-        <span class="swipe-hint">${idx + 1} / 3 · swipe</span>
+      <div class="space-y-4">
+        <button type="button" data-hub-mode="ondemand" class="w-full text-left p-4 rounded-2xl bg-white border border-black/10 shadow-card card-pop" style="display:block;">
+          <div class="flex items-center justify-between">
+            <span class="text-xs font-extrabold uppercase tracking-wider text-amber-deep">⚡ Express Shopping</span>
+            <span class="text-terra font-extrabold text-sm">Explore →</span>
+          </div>
+          <h2 class="font-display text-xl font-semibold mt-1">On-Demand Grocery</h2>
+          <p class="mt-1 text-sm font-semibold text-ink-mute">Pick exact fresh veggies, fruits & staples. ₹200 Min Order, Same-Day delivery option.</p>
+        </button>
+
+        <button type="button" data-hub-mode="moms" class="w-full text-left p-4 rounded-2xl bg-white border border-black/10 shadow-card card-pop" style="display:block;">
+          <div class="flex items-center justify-between">
+            <span class="text-xs font-extrabold uppercase tracking-wider text-amber-deep">👧 Kids Special</span>
+            <span class="text-terra font-extrabold text-sm">Build Kit →</span>
+          </div>
+          <h2 class="font-display text-xl font-semibold mt-1">Mom’s Kitchen</h2>
+          <p class="mt-1 text-sm font-semibold text-ink-mute">Weekly kids’ veggie & tiffin kits scalable per child. Includes <strong>FREE Salads & Aromatics</strong>.</p>
+        </button>
+
+        <button type="button" data-hub-mode="family" class="w-full text-left p-4 rounded-2xl bg-white border border-black/10 shadow-card card-pop" style="display:block;">
+          <div class="flex items-center justify-between">
+            <span class="text-xs font-extrabold uppercase tracking-wider text-amber-deep">👨‍👩‍👧‍👦 Weekly Basket</span>
+            <span class="text-terra font-extrabold text-sm">Customize →</span>
+          </div>
+          <h2 class="font-display text-xl font-semibold mt-1">Family Kitchen</h2>
+          <p class="mt-1 text-sm font-semibold text-ink-mute">Complete weekly family basket with adjustable staples, sorted veggies, leafy greens & sprouts.</p>
+        </button>
+      </div>
+      ${navBar("hub")}
+    </section>`;
+  }
+
+  function journeySwitcher() {
+    return `<div class="journey-wrap">
+      <div class="flex items-center justify-between px-1 mb-2">
+        <button type="button" data-go="hub" class="text-xs font-extrabold text-terra">← Back to Hub</button>
+        <span class="text-xs font-bold text-ink-mute">${MODE_META[state.homeTab].label}</span>
       </div>
     </div>`;
   }
@@ -789,7 +824,7 @@
       </header>
       <div class="swipe-stage" id="swipeStage">${panes[state.homeTab]()}</div>
       ${stickyCartBar()}
-      ${navBar("home")}
+      ${navBar("hub")}
     </section>`;
   }
 
@@ -845,7 +880,7 @@
     const empty = !state.cart.length && !state.savedLater.length;
     return `<section class="screen">
       <header class="page-header">
-        <button type="button" data-go="home" class="icon-back">${icon("back")}</button>
+        <button type="button" data-go="hub" class="icon-back">${icon("back")}</button>
         <div class="flex-1"><h1>Your Cart</h1><p>${cartCount()} items</p></div>
         <div class="logo-mark sm">${logoSvg(22)}</div>${profileBtn()}
       </header>
@@ -954,7 +989,7 @@
         <div><strong>Family Kitchen</strong><span>${SLOT_LABEL[d.family]} · 7–10 AM</span></div>
       </div>
       <button type="button" data-go="orders" class="mt-8 w-full h-14 rounded-2xl bg-terra text-white font-extrabold text-lg">Track Order</button>
-      <button type="button" data-go="home" class="mt-3 w-full h-12 font-bold text-ink-mute">Continue Shopping</button>
+      <button type="button" data-go="hub" class="mt-3 w-full h-12 font-bold text-ink-mute">Back to Hub</button>
     </section>`;
   }
 
@@ -988,7 +1023,7 @@
         <div class="progress-track mt-3"><div class="progress-fill" style="width:${Math.min(100, Math.round((n.points / n.pointsGoal) * 100))}%"></div></div>
         <p class="mt-2 text-sm font-bold text-terra">Next reward: ${left} points away</p>
       </article>
-      ${navBar("nutri")}
+      ${navBar("hub")}
     </section>`;
   }
 
@@ -1001,14 +1036,14 @@
       <div class="mt-3" style="display:grid;gap:10px">${ORDERS.map((o) => {
         const cls = o.status === "Delivered" ? "status-delivered" : o.status === "In-Transit" ? "status-transit" : "status-scheduled";
         return `<article class="panel card-pop"><div style="display:flex;justify-content:space-between;gap:8px">
-          <div><p class="font-extrabold">${o.id}</p><p class="text-sm text-ink-mute font-semibold">${o.date} · ${o.items}</p></div>
+          <div><p class="font-extrabold">${o.id}</p><p class="text-sm text-ink-mute font-semibold">${o.date} ·${o.items}</p></div>
           <span class="status-tag ${cls}">${o.status}</span></div>
           <div style="display:flex;justify-content:space-between;align-items:center;margin-top:10px">
             <p class="font-extrabold text-xl">₹${o.total}</p>
             <button type="button" data-support="${o.id}" class="btn-soft">${icon("support")} Support</button>
           </div></article>`;
       }).join("")}</div>
-      ${navBar("orders")}
+      ${navBar("hub")}
     </section>`;
   }
 
@@ -1033,7 +1068,8 @@
             <p class="font-extrabold text-2xl">₹${state.user.wallet}</p></div>
           <button type="button" id="profileTopUp" class="btn-amber">Top-Up</button></div>
       </div>
-      <button type="button" data-go="nutri" class="mt-4 w-full h-12 rounded-2xl bg-white border border-black/8 font-extrabold">Open Nutri-Tracker</button>
+      <button type="button" data-go="hub" class="mt-4 w-full h-12 rounded-2xl bg-white border border-black/8 font-extrabold">Choose Hub Journey</button>
+      <button type="button" data-go="nutri" class="mt-2 w-full h-12 rounded-2xl bg-white border border-black/8 font-extrabold">Open Nutri-Tracker</button>
       <button type="button" data-go="orders" class="mt-2 w-full h-12 rounded-2xl bg-white border border-black/8 font-extrabold">View My Orders</button>
       <button type="button" id="logout" class="mt-2 w-full h-12 rounded-2xl text-ink-mute font-bold">Log out</button>
     </div>`;
@@ -1156,7 +1192,7 @@
 
   function render(opts = {}) {
     const map = {
-      splash: renderSplash, login: renderLogin, otp: renderOtp, location: renderLocation,
+      splash: renderSplash, login: renderLogin, otp: renderOtp, location: renderLocation, hub: renderHub,
       home: renderHome, cart: renderCart, checkout: renderCheckout, success: renderSuccess,
       nutri: renderNutri, orders: renderOrders,
     };
@@ -1218,6 +1254,12 @@
     screensEl.querySelectorAll("[data-go-tab]").forEach((btn) => {
       btn.addEventListener("click", () => go("home", { homeTab: btn.dataset.goTab }));
     });
+    screensEl.querySelectorAll("[data-hub-mode]").forEach((btn) => {
+      btn.addEventListener("click", () => {
+        const mode = btn.dataset.hubMode;
+        go("home", { homeTab: mode });
+      });
+    });
 
     const openProfile = () => { state.profileOpen = true; scheduleRender(); };
     const closeProfile = () => { state.profileOpen = false; focusKey = "openProfile"; scheduleRender({ focus: "openProfile" }); };
@@ -1249,14 +1291,14 @@
     screensEl.querySelectorAll("[data-flag]").forEach((btn) => btn.addEventListener("click", () => { state.country = btn.dataset.flag; state.flagsOpen = false; render(); }));
     $("#googleSignIn")?.addEventListener("click", async () => {
       state.phone = state.phone || "9876543210"; state.user.phone = state.phone;
-      await showLoader(400); toast("Signed in with Google"); go(state.locationGranted ? "home" : "location");
+      await showLoader(400); toast("Signed in with Google"); go(state.locationGranted ? "hub" : "location");
     });
 
     const submitOtp = async () => {
       const code = [...screensEl.querySelectorAll("[data-otp]")].map((i) => i.value).join("");
       if (code.length < 4) return toast("Enter the 4-digit OTP");
       if (code !== "1234" && code !== "0000") return toast("Try 1234 for this demo");
-      await showLoader(300); toast("Verified"); go(state.locationGranted ? "home" : "location");
+      await showLoader(300); toast("Verified"); go(state.locationGranted ? "hub" : "location");
     };
     screensEl.querySelectorAll("[data-otp]").forEach((input, idx, list) => {
       input.addEventListener("input", () => {
@@ -1283,9 +1325,9 @@
       }
       await showLoader(220);
       toast("Location enabled");
-      go("home", { replaceHash: true });
+      go("hub", { replaceHash: true });
     });
-    $("#skipLoc")?.addEventListener("click", () => { state.locationGranted = true; go("home", { replaceHash: true }); });
+    $("#skipLoc")?.addEventListener("click", () => { state.locationGranted = true; go("hub", { replaceHash: true }); });
 
     screensEl.querySelectorAll("[data-home-tab]").forEach((btn) => {
       btn.addEventListener("click", () => {
@@ -1479,7 +1521,7 @@
         const qty = (row.qty || 1) + Number(btn.dataset.d);
         if (qty <= 0) { removeCart(row.key); ensureMomsFreebies(); }
         else if (row.source === "ondemand") syncOdItem(row.id, { qty }, { forceAdd: true });
-        else { row.qty = qty; if (row.extraKind) state.momsExtras[row.extraKind] = qty; upsertCart(row); }
+        else { row.qty = qty; if (row.extraKind) state.momsExtras[row.extraKind] = qty; upsertCard(row); }
         render();
       });
     });
@@ -1534,7 +1576,7 @@
   load();
   seedFamily();
   if (!applyHash()) {
-    if (state.locationGranted && state.phone) state.screen = "home";
+    if (state.locationGranted && state.phone) state.screen = "hub";
   }
   syncHash(true);
   scheduleRender();
