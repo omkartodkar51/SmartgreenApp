@@ -2,12 +2,12 @@
   "use strict";
 
   const MOV = 200;
-  const STORAGE = "smart-green-v5";
-  const GRAMS_PER_KIT = 500;
+  const STORAGE = "smart-green-v4";
+  const GRAMS_PER_KID = 250;
   const MODES = ["ondemand", "moms", "family"];
   const MODE_META = {
     ondemand: { label: "On-Demand", desc: "Pick exactly what you need" },
-    moms: { label: "Mom’s Kitchen", desc: "Weekly veggie & custom tiffin kits" },
+    moms: { label: "Mom’s Kitchen", desc: "Kids’ weekly veggie & tiffin kits" },
     family: { label: "Family Kitchen", desc: "Complete weekly family basket" },
   };
   const img = (id, w = 600) =>
@@ -62,13 +62,13 @@
     { id: "extra-fruit", name: "Premium Fruit Basket", price: 199, kind: "fruit" },
   ];
   const FAMILY_STAPLES = [
-    { id: "onion", name: "Onion", pricePerKg: 40, photo: img("photo-1518977956812-cd3dbadaafcd"), hue: "#e8d4c8", accent: "#8d6e63", healthTag: "BP Cautious" },
-    { id: "potato", name: "Potato", pricePerKg: 36, photo: img("photo-1518977676601-b53f82aba655"), hue: "#d4a35a", accent: "#8a6230", healthTag: "Diabetes Cautious" },
-    { id: "tomato", name: "Tomato", pricePerKg: 48, photo: img("photo-1592924357228-91a4daadcfea"), hue: "#d4543a", accent: "#9a2f1c", healthTag: "Diabetes Friendly" },
+    { id: "onion", name: "Onion", pricePerKg: 40, photo: img("photo-1518977956812-cd3dbadaafcd"), hue: "#e8d4c8", accent: "#8d6e63" },
+    { id: "potato", name: "Potato", pricePerKg: 36, photo: img("photo-1518977676601-b53f82aba655"), hue: "#d4a35a", accent: "#8a6230" },
+    { id: "tomato", name: "Tomato", pricePerKg: 48, photo: img("photo-1592924357228-91a4daadcfea"), hue: "#d4543a", accent: "#9a2f1c" },
   ];
   const ORDERS = [
     { id: "SG-2401", date: "Fri, 3 Oct", total: 486, status: "In-Transit", items: "Weekly Basket · 12 items" },
-    { id: "SG-2390", date: "Tue, 30 Sep", total: 320, status: "Delivered", items: "Mom’s Kitchen · 2 kits" },
+    { id: "SG-2390", date: "Tue, 30 Sep", total: 320, status: "Delivered", items: "Mom’s Kitchen · 2 kids" },
     { id: "SG-2378", date: "Sun, 28 Sep", total: 210, status: "Delivered", items: "On-Demand · Veggies" },
     { id: "SG-2361", date: "Fri, 26 Sep", total: 540, status: "Scheduled", items: "Family Kitchen · Sun slot" },
   ];
@@ -83,9 +83,7 @@
     locationGranted: false,
     homeTab: "ondemand",
     odCategory: "Veggies",
-    kitsCount: 2,
-    kitMode: "weekly",
-    customKitNames: ["Kit 1", "Kit 2"],
+    kids: 2,
     cart: [],
     savedLater: [],
     odDraft: {},
@@ -139,7 +137,7 @@
     try {
       localStorage.setItem(STORAGE, JSON.stringify({
         phone: state.phone, user: state.user, locationGranted: state.locationGranted,
-        cart: state.cart, savedLater: state.savedLater, kitsCount: state.kitsCount, kitMode: state.kitMode, customKitNames: state.customKitNames, family: state.family,
+        cart: state.cart, savedLater: state.savedLater, kids: state.kids, family: state.family,
         momsExtras: state.momsExtras, delivery: state.delivery, homeTab: state.homeTab, odDraft: state.odDraft,
       }));
     } catch (_) {
@@ -154,7 +152,7 @@
 
   function load() {
     try {
-      const raw = localStorage.getItem(STORAGE) || localStorage.getItem("smart-green-v4");
+      const raw = localStorage.getItem(STORAGE) || localStorage.getItem("smart-green-v3");
       if (!raw) return;
       const d = JSON.parse(raw);
       if (d.phone) state.phone = d.phone;
@@ -162,9 +160,7 @@
       if (d.locationGranted) state.locationGranted = d.locationGranted;
       if (Array.isArray(d.cart)) state.cart = d.cart;
       if (Array.isArray(d.savedLater)) state.savedLater = d.savedLater;
-      if (d.kitsCount) state.kitsCount = d.kitsCount;
-      if (d.kitMode) state.kitMode = d.kitMode;
-      if (d.customKitNames) state.customKitNames = d.customKitNames;
+      if (d.kids) state.kids = d.kids;
       if (d.family) {
         state.family = { ...state.family, ...d.family, staples: { ...state.family.staples, ...(d.family.staples || {}) }, leafy: { ...state.family.leafy, ...(d.family.leafy || {}) }, sprouts: { ...state.family.sprouts, ...(d.family.sprouts || {}) }, extras: { ...state.family.extras, ...(d.family.extras || {}) } };
       }
@@ -177,7 +173,6 @@
 
   function toast(msg) {
     const el = $("#toast");
-    if (!el) return;
     el.hidden = false;
     el.textContent = msg;
     clearTimeout(toast._t);
@@ -185,7 +180,6 @@
   }
 
   function showLoader(ms = 220) {
-    if (!loaderEl) return Promise.resolve();
     loaderEl.hidden = false;
     loaderEl.setAttribute("aria-busy", "true");
     return new Promise((r) => setTimeout(() => {
@@ -449,7 +443,7 @@
       const n = momsVegSelected().length;
       if (n > 0 && n < 6) cards.push({ title: "Complete your kit", body: `You’ve selected ${n} veggie kits. You can choose ${6 - n} more.` });
       if (n >= 1) cards.push({ title: "Free salads added", body: `${Math.min(n, 6)} free salads were added automatically (1:1, max 6).` });
-      if (state.kitsCount >= 2) cards.push({ title: "Quantities adjusted", body: `Portions automatically scale for ${state.kitsCount} kits.` });
+      if (state.kids >= 2) cards.push({ title: "Quantities adjusted", body: `Portions automatically scale for ${state.kids} children.` });
     }
     if (mode === "family") {
       const leafyN = Object.values(state.family.leafy).filter(Boolean).length;
@@ -458,11 +452,8 @@
       if (leafyN > 0 && leafyN < 3) cards.push({ title: "Room for leafy greens", body: `Your weekly basket allows ${3 - leafyN} more leafy green${3 - leafyN === 1 ? "" : "s"}.` });
       if (!state.family.extras.fruit) cards.push({ title: "Recommended for you", body: "Would you like to add a Premium Fruit Basket?", cta: "Add fruit", action: "add-fruit" });
     }
-    if (mode === "ondemand") {
-      cards.push({ title: "💡 Expert On-Demand Suggestion", body: "Try adding Organic Hydroponic Herbs Combo (Fresh mint, coriander, and lemon pairing for detox water) or Express Salad Express Pack for quick prep!", cta: "Explore Combo", action: "stay" });
-    }
     if (!cards.length) return "";
-    return `<div class="reco-stack">${cards.slice(0, 3).map((c) => `
+    return `<div class="reco-stack">${cards.slice(0, 2).map((c) => `
       <aside class="reco-card"><div><p class="reco-kicker">Recommended for you</p><p class="reco-title">${c.title}</p><p class="reco-body">${c.body}</p></div>
       ${c.cta ? `<button type="button" class="reco-cta" data-reco="${c.action || "stay"}">${c.cta}</button>` : ""}</aside>`).join("")}</div>`;
   }
@@ -550,57 +541,18 @@
     </section>`;
   }
 
-  function renderHub() {
-    return `<section class="screen with-nav">
-      ${brandRow(true)}
-      <div class="p-5">
-        <div class="welcome-hub-header mb-4">
-          <h2 class="font-display text-2xl font-semibold">Welcome Hub</h2>
-          <p class="text-ink-mute font-semibold text-sm">Choose your preferred kitchen pathway below</p>
-        </div>
-        <div class="journey-cards-grid grid gap-4">
-          <button type="button" data-home-tab="ondemand" class="journey-card-item animated-card flex items-center gap-4 p-4 rounded-2xl bg-white border border-black/10 shadow-card text-left w-full cursor-pointer">
-            <div class="journey-card-icon text-3xl p-3 bg-surface-subtle rounded-xl">⚡</div>
-            <div class="journey-card-content flex-1">
-              <h3 class="font-extrabold text-lg text-forest-dark">On-Demand Delivery</h3>
-              <p class="text-xs text-ink-mute font-semibold mt-1">Pick exactly what you need instantly</p>
-              <ul class="styled-bullet-list mt-2 space-y-1 text-xs text-ink-mute font-medium">
-                <li>✔ Super-fast 10-minute slotting</li>
-                <li>✔ Staples, fresh fruits & veggies</li>
-              </ul>
-            </div>
-            <div class="journey-card-arrow font-extrabold text-xl text-terra">→</div>
-          </button>
-
-          <button type="button" data-home-tab="moms" class="journey-card-item animated-card flex items-center gap-4 p-4 rounded-2xl bg-white border border-black/10 shadow-card text-left w-full cursor-pointer">
-            <div class="journey-card-icon text-3xl p-3 bg-surface-subtle rounded-xl">👶</div>
-            <div class="journey-card-content flex-1">
-              <h3 class="font-extrabold text-lg text-forest-dark">Mom’s Kitchen</h3>
-              <p class="text-xs text-ink-mute font-semibold mt-1">Weekly veggie & custom tiffin kits</p>
-              <ul class="styled-bullet-list mt-2 space-y-1 text-xs text-ink-mute font-medium">
-                <li>✔ Multi-kit quantity customization</li>
-                <li>✔ Weekly nutritious rotation kits</li>
-              </ul>
-            </div>
-            <div class="journey-card-arrow font-extrabold text-xl text-terra">→</div>
-          </button>
-
-          <button type="button" data-home-tab="family" class="journey-card-item animated-card flex items-center gap-4 p-4 rounded-2xl bg-white border border-black/10 shadow-card text-left w-full cursor-pointer">
-            <div class="journey-card-icon text-3xl p-3 bg-surface-subtle rounded-xl">🏡</div>
-            <div class="journey-card-content flex-1">
-              <h3 class="font-extrabold text-lg text-forest-dark">Family Kitchen</h3>
-              <p class="text-xs text-ink-mute font-semibold mt-1">Complete weekly family basket with health tags</p>
-              <ul class="styled-bullet-list mt-2 space-y-1 text-xs text-ink-mute font-medium">
-                <li>✔ Balanced medical & diet tags</li>
-                <li>✔ Custom staples & sprout bundles</li>
-              </ul>
-            </div>
-            <div class="journey-card-arrow font-extrabold text-xl text-terra">→</div>
-          </button>
-        </div>
+  function journeySwitcher() {
+    const idx = MODES.indexOf(state.homeTab);
+    return `<div class="journey-wrap">
+      <div class="journey-track" role="tablist" aria-label="Shopping journeys">
+        ${MODES.map((id) => `<button type="button" role="tab" aria-selected="${state.homeTab === id}" data-home-tab="${id}" data-focus="${id}" class="journey-btn ${state.homeTab === id ? "active" : ""}"><span>${MODE_META[id].label}</span></button>`).join("")}
       </div>
-      ${navBar("home")}
-    </section>`;
+      <p class="journey-desc">${MODE_META[state.homeTab].desc}</p>
+      <div class="swipe-dots" aria-hidden="true">
+        ${MODES.map((_, i) => `<span class="dot ${i === idx ? "on" : ""}"></span>`).join("")}
+        <span class="swipe-hint">${idx + 1} / 3 · swipe</span>
+      </div>
+    </div>`;
   }
 
   function draftFor(id) {
@@ -668,7 +620,8 @@
   }
 
   function paneShell(pane, html) {
-    return `<div class="mode-pane" data-pane="${pane}"><div class="back-to-hub-row mb-3"><button type="button" data-home-tab="hub" class="text-terra font-extrabold text-sm flex items-center gap-1">← Back to Hub</button></div>${html}</div>`;
+    const dir = state.animatePane ? (state.navDir < 0 ? "from-left" : "from-right") : "";
+    return `<div class="mode-pane${dir ? ` ${dir}` : ""}" data-pane="${pane}">${html}</div>`;
   }
 
   function renderOnDemandPane() {
@@ -686,23 +639,17 @@
     const selected = momsVegSelected();
     const n = selected.length;
     const freeSalads = Math.min(n, 6);
-    const g = 500;
+    const g = state.kids * GRAMS_PER_KID;
     return paneShell("moms", `
-      <div class="mode-hero"><h2>Mom’s Kitchen</h2><p>Weekly veggie & custom tiffin kits</p></div>
+      <div class="mode-hero"><h2>Mom’s Kitchen</h2><p>Smart weekly veggie kits for your kids</p></div>
       <section class="panel">
-        <p class="panel-kicker">Kits Customizer</p><p class="panel-title">Kiti kits havayt? (How many kits?)</p>
+        <p class="panel-kicker">Children</p><p class="panel-title">How many children?</p>
         <div class="kids-stepper">
-          <button type="button" data-kits="-1" class="step-btn">−</button>
-          <div class="kids-count"><strong>${state.kitsCount}</strong><span>Kits</span></div>
-          <button type="button" data-kits="1" class="step-btn">+</button>
+          <button type="button" data-kids="-1" class="step-btn">−</button>
+          <div class="kids-count"><strong>${state.kids}</strong><span>${state.kids === 1 ? "child" : "children"}</span></div>
+          <button type="button" data-kids="1" class="step-btn">+</button>
         </div>
-        <div class="info-bullets-box bg-surface-subtle p-3 rounded-xl mt-3 border border-black/5">
-          <ul class="styled-bullet-list space-y-1 text-xs text-ink-mute font-medium">
-            <li>✔ Eka kit madhye tumhala ${g}g fresh chopped veggies miltil</li>
-            <li>✔ Total quantity automatically scale hoil (${state.kitsCount * g}g total)</li>
-            <li>✔ Qty tumhala change karta yeil ani custom preferences deta yeil</li>
-          </ul>
-        </div>
+        <p class="auto-note">Your quantities automatically adjust for ${state.kids} ${state.kids === 1 ? "child" : "children"} · ${formatGrams(g)} per kit</p>
       </section>
       <section class="included-panel">
         <div class="included-head"><h3>Your Standard Kit</h3><span class="badge-included">✓ FREE INCLUDED</span></div>
@@ -755,16 +702,16 @@
     const value = familyBasketValue();
     const leafyPhotos = { spinach: img("photo-1576045057995-568f588f82fb"), methi: img("photo-1508747703725-719777637510"), dill: img("photo-1459411621453-7b03977f4bfc") };
     return paneShell("family", `
-      <div class="mode-hero"><h2>Family Kitchen</h2><p>Build your weekly family basket with health tags</p></div>
+      <div class="mode-hero"><h2>Family Kitchen</h2><p>Build your weekly family basket</p></div>
       <section class="included-panel">
         <div class="included-head"><h3>Your Standard Basket</h3><span class="badge-included">✓ Included</span></div>
-        <div class="staple-summary">${FAMILY_STAPLES.map((s) => `<div><span>${s.name} <small class="text-terra">(${s.healthTag})</small></span><strong>${state.family.staples[s.id]}kg</strong></div>`).join("")}</div>
+        <div class="staple-summary">${FAMILY_STAPLES.map((s) => `<div><span>${s.name}</span><strong>${state.family.staples[s.id]}kg</strong></div>`).join("")}</div>
         <button type="button" id="toggleProp" class="ghost-cta">${state.showPropEditor ? "Hide proportion editor" : "Adjust Proportion"}</button>
         <p class="basket-value">Basket value <strong>₹${value}</strong></p>
       </section>
       ${state.showPropEditor ? `<section class="panel"><p class="panel-kicker">1. Staples</p><h3 class="panel-title">Adjust included quantities</h3>
         ${FAMILY_STAPLES.map((s) => `<div class="prop-row"><div class="prop-left"><div class="produce-art tiny">${producePhoto(s)}</div>
-          <div><p class="prop-name">${s.name}</p><p class="prop-meta">Included · ₹${s.pricePerKg}/kg · <strong>${s.healthTag}</strong></p></div></div>
+          <div><p class="prop-name">${s.name}</p><p class="prop-meta">Included · ₹${s.pricePerKg}/kg</p></div></div>
           <div class="stepper"><button type="button" data-staple="${s.id}" data-d="-0.5">−</button><strong>${state.family.staples[s.id]}kg</strong>
           <button type="button" data-staple="${s.id}" data-d="0.5">+</button></div></div>`).join("")}
       </section>` : ""}
@@ -826,7 +773,6 @@
   }
 
   function renderHome() {
-    if (state.homeTab === "hub") return renderHub();
     const panes = { ondemand: renderOnDemandPane, moms: renderMomsPane, family: renderFamilyPane };
     return `<section class="screen with-nav with-sticky-cart">
       <header class="home-header">
@@ -839,6 +785,7 @@
           </button>
           <button type="button" class="cart-mini" data-go="cart" aria-label="Open cart">${icon("cart")}${cartCount() ? `<em>${cartCount()}</em>` : ""}</button>
         </div>
+        ${journeySwitcher()}
       </header>
       <div class="swipe-stage" id="swipeStage">${panes[state.homeTab]()}</div>
       ${stickyCartBar()}
@@ -913,12 +860,14 @@
           </div></div>` : `
         ${status.length ? `<section class="status-panel">${status.map((s) => `<p class="${s.ok ? "ok" : "warn"}">${s.ok ? "✓" : "⚠"} ${s.text}</p>`).join("")}</section>` : ""}
         <section class="cart-sec">
-          <div class="cart-sec-head"><div><h2>On-Demand</h2><p>Same-day or scheduled delivery</p></div><strong>₹${t.onDemand}</strong></div>${deliveryCards("ondemand")}
+          <div class="cart-sec-head"><div><h2>On-Demand</h2><p>Same-day or scheduled delivery</p></div><strong>₹${t.onDemand}</strong></div>
+          ${deliveryCards("ondemand")}
           ${od.length ? od.map(cartItemRow).join("") : `<p class="empty-sec">No On-Demand items yet</p>`}
           <button type="button" class="add-more" data-go-tab="ondemand">+ Add More On-Demand Items</button>
         </section>
         <section class="cart-sec">
-          <div class="cart-sec-head"><div><h2>Mom’s Kitchen</h2><p>Weekly Kits · ${state.kitsCount} Kits</p></div><strong>₹${t.moms}</strong></div>${deliveryCards("moms")}
+          <div class="cart-sec-head"><div><h2>Mom’s Kitchen</h2><p>Weekly Kids’ Kit · ${state.kids} ${state.kids === 1 ? "child" : "children"}</p></div><strong>₹${t.moms}</strong></div>
+          ${deliveryCards("moms")}
           ${moms.length ? `
             <div class="inc-block"><p class="inc-title">Included</p>${moms.filter((m) => m.free || !m.extraKind).map(cartItemRow).join("")}</div>
             ${moms.some((m) => m.extraKind) ? `<div class="extra-block"><p class="inc-title">Extras</p>${moms.filter((m) => m.extraKind).map(cartItemRow).join("")}</div>` : ""}`
@@ -926,7 +875,8 @@
           <button type="button" class="add-more" data-go-tab="moms">+ Add Mom’s Kitchen Extras</button>
         </section>
         <section class="cart-sec">
-          <div class="cart-sec-head"><div><h2>Family Kitchen</h2><p>Weekly Family Basket</p></div><strong>₹${t.family}</strong></div>${deliveryCards("family")}
+          <div class="cart-sec-head"><div><h2>Family Kitchen</h2><p>Weekly Family Basket</p></div><strong>₹${t.family}</strong></div>
+          ${deliveryCards("family")}
           ${family.length ? family.map(cartItemRow).join("") : `<p class="empty-sec">No Family Basket yet</p>`}
           <button type="button" class="add-more" data-go-tab="family">+ Add Family Kitchen Items</button>
         </section>
@@ -1051,7 +1001,7 @@
       <div class="mt-3" style="display:grid;gap:10px">${ORDERS.map((o) => {
         const cls = o.status === "Delivered" ? "status-delivered" : o.status === "In-Transit" ? "status-transit" : "status-scheduled";
         return `<article class="panel card-pop"><div style="display:flex;justify-content:space-between;gap:8px">
-          <div><p class="font-extrabold">${o.id}</p><p class="text-sm text-ink-mute font-semibold">${o.date} ·${o.items}</p></div>
+          <div><p class="font-extrabold">${o.id}</p><p class="text-sm text-ink-mute font-semibold">${o.date} · ${o.items}</p></div>
           <span class="status-tag ${cls}">${o.status}</span></div>
           <div style="display:flex;justify-content:space-between;align-items:center;margin-top:10px">
             <p class="font-extrabold text-xl">₹${o.total}</p>
@@ -1140,6 +1090,51 @@
 
   function findMomsMeta(id) { return MOMS_VEG.find((x) => x.id === id) || null; }
 
+  function syncFamilyToCart() {
+    state.cart = state.cart.filter((c) => c.source !== "family");
+    let total = 0;
+    for (const s of FAMILY_STAPLES) {
+      const kg = state.family.staples[s.id] || 0;
+      if (kg <= 0) continue;
+      const price = Math.round(kg * s.pricePerKg);
+      total += price;
+      upsertCart({ key: `family:staple:${s.id}`, name: s.name, source: "family", price, weight: kg * 1000, qty: 1, meta: `Staples · Included · ${kg}kg` });
+    }
+    for (const [id, prefs] of Object.entries(state.family.veggies)) {
+      const meta = CATALOG.Veggies.find((v) => v.id === id);
+      const extraCharge = (prefs.cut ? 5 : 0) + (prefs.washed ? 5 : 0);
+      const price = priceForWeight(meta.pricePerKg, 500);
+      total += price + extraCharge;
+      upsertCart({
+        key: `family:veg:${id}`, name: meta.name, source: "family", price, extraCharge, weight: 500, qty: 1,
+        meta: `Sorted veggies${prefs.cut ? " · Cut" : ""}${prefs.washed ? " · Washed" : ""}`,
+      });
+    }
+    for (const [k, on] of Object.entries(state.family.leafy)) {
+      if (!on) continue;
+      upsertCart({ key: `family:leafy:${k}`, name: k[0].toUpperCase() + k.slice(1), source: "family", price: 30, weight: 250, qty: 1, meta: "Leafy greens · Included" });
+      total += 30;
+    }
+    for (const [k, on] of Object.entries(state.family.sprouts)) {
+      if (!on) continue;
+      const sprouted = state.family.sproutsMode === "sprouted";
+      const extraCharge = sprouted ? 10 : 0;
+      upsertCart({
+        key: `family:sprout:${k}`, name: `${k[0].toUpperCase() + k.slice(1)} ${sprouted ? "Sprouts" : "Raw"}`,
+        source: "family", price: 55, extraCharge, weight: 250, qty: 1, meta: sprouted ? "Sprouted +₹10" : "Raw sprouts",
+      });
+      total += 55 + extraCharge;
+    }
+    upsertCart({ key: "family:aroma", name: "Free Aromatic Kit", source: "family", free: true, price: 0, qty: 1, meta: "Included · ₹0" });
+    if (state.family.extras.fruit) {
+      upsertCart({ key: "family:fruit", name: "Premium Fruit Basket", source: "family", price: 299, qty: 1, meta: "Extra", extraKind: "fruit" });
+      total += 299;
+    }
+    state.family.inCart = true;
+    state.delivery.moms = state.delivery.moms || "sun";
+    return total;
+  }
+
   function scheduleRender(opts = {}) {
     if (opts.focus) focusKey = opts.focus;
     cancelAnimationFrame(renderTimer);
@@ -1189,6 +1184,30 @@
     if (focusKey || state.profileOpen || opts.announce) restoreFocus();
     else focusKey = null;
     if (state.cartBounce) setTimeout(() => { state.cartBounce = false; }, 450);
+  }
+
+  function bindSwipe() {
+    const stage = $("#swipeStage");
+    if (!stage) return;
+    stage.setAttribute("tabindex", "0");
+    stage.setAttribute("aria-label", "Shopping journeys. Swipe or use arrow keys.");
+    let x0 = null, y0 = null;
+    stage.addEventListener("touchstart", (e) => {
+      const t = e.changedTouches[0]; x0 = t.clientX; y0 = t.clientY;
+    }, { passive: true });
+    stage.addEventListener("touchend", (e) => {
+      if (x0 == null) return;
+      const t = e.changedTouches[0];
+      const dx = t.clientX - x0; const dy = t.clientY - y0;
+      x0 = null; y0 = null;
+      if (Math.abs(dx) < 48 || Math.abs(dx) < Math.abs(dy)) return;
+      if (dx < 0) shiftMode(1);
+      else shiftMode(-1);
+    }, { passive: true });
+    stage.addEventListener("keydown", (e) => {
+      if (e.key === "ArrowRight") { e.preventDefault(); shiftMode(1); }
+      else if (e.key === "ArrowLeft") { e.preventDefault(); shiftMode(-1); }
+    });
   }
 
   function bind() {
@@ -1270,22 +1289,19 @@
 
     screensEl.querySelectorAll("[data-home-tab]").forEach((btn) => {
       btn.addEventListener("click", () => {
-        const tab = btn.dataset.homeTab;
-        if (tab === "hub") {
-          state.homeTab = "hub";
-        } else {
-          const from = MODES.indexOf(state.homeTab === "hub" ? "ondemand" : state.homeTab);
-          const to = MODES.indexOf(tab);
-          if (from >= 0 && to >= 0) state.navDir = to >= from ? 1 : -1;
-          state.animatePane = true;
-          state.homeTab = tab;
-        }
-        focusKey = tab;
+        const from = MODES.indexOf(state.homeTab);
+        const to = MODES.indexOf(btn.dataset.homeTab);
+        if (from === to) return;
+        if (from >= 0 && to >= 0) state.navDir = to >= from ? 1 : -1;
+        state.animatePane = true;
+        state.homeTab = btn.dataset.homeTab;
+        focusKey = btn.dataset.homeTab;
         save();
         syncHash(true);
-        scheduleRender({ keepScroll: true, focus: tab });
+        scheduleRender({ keepScroll: true, focus: btn.dataset.homeTab });
       });
     });
+    bindSwipe();
 
     screensEl.querySelectorAll("[data-od-cat]").forEach((btn) => btn.addEventListener("click", () => { state.odCategory = btn.dataset.odCat; scheduleRender({ keepScroll: true }); }));
     screensEl.querySelectorAll("[data-od-weight]").forEach((btn) => {
@@ -1341,12 +1357,12 @@
       });
     });
 
-    screensEl.querySelectorAll("[data-kits]").forEach((btn) => {
+    screensEl.querySelectorAll("[data-kids]").forEach((btn) => {
       btn.addEventListener("click", () => {
-        state.kitsCount = Math.min(6, Math.max(1, state.kitsCount + Number(btn.dataset.kits)));
+        state.kids = Math.min(6, Math.max(1, state.kids + Number(btn.dataset.kids)));
         for (const row of state.cart) {
           if (row.source === "moms" && !row.free && !row.extraKind) {
-            row.weight = state.kitsCount * GRAMS_PER_KIT;
+            row.weight = state.kids * GRAMS_PER_KID;
             row.meta = `Included · ${formatGrams(row.weight)}`;
           }
         }
@@ -1361,7 +1377,7 @@
           if (momsVegSelected().length >= 6) return toast("You already have 6 veggie kits");
           upsertCart({
             key, id, name: meta.name, source: "moms", price: meta.price,
-            weight: state.kitsCount * GRAMS_PER_KIT, qty: 1, meta: `Included · ${formatGrams(state.kitsCount * GRAMS_PER_KIT)}`,
+            weight: state.kids * GRAMS_PER_KID, qty: 1, meta: `Included · ${formatGrams(state.kids * GRAMS_PER_KID)}`,
           });
         }
         ensureMomsFreebies(); syncMomsExtrasToCart(); render();
@@ -1518,7 +1534,7 @@
   load();
   seedFamily();
   if (!applyHash()) {
-    if (state.locationGranted && state.phone) state.homeTab = "hub";
+    if (state.locationGranted && state.phone) state.screen = "home";
   }
   syncHash(true);
   scheduleRender();
