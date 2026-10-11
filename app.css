@@ -1,31 +1,28 @@
 @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Noto+Sans+Devanagari:wght@500;700&display=swap');
 
 :root {
-  /* Smart Green & Quick-Commerce Combined Palette */
-  --bg-app: #F4F7F4; /* Soft clean background */
-  --surface: #FFFFFF; /* Pure white cards */
-  --surface-subtle: #E8F0EA; /* Subtle green tint container */
+  --bg-app: #F4F7F5;
+  --surface: #FFFFFF;
+  --surface-subtle: #EBF3EE;
   
-  --forest-dark: #0A261D; /* High contrast text/headers */
-  --forest-main: #11382A; /* Core brand dark green */
-  --forest-light: #1B4D3E; /* Rich Forest Green header & brand */
+  --forest-dark: #0D2E23;
+  --forest-main: #143D30;
+  --forest-light: #1B4D3E;
   
-  --sage: #2E7D32; /* Organic/Eco Green */
-  --sage-light: #81C784; /* Active states & success */
+  --terra: #D96B43;
+  --terra-deep: #B8522B;
+  --peach-soft: #FDF1ED;
   
-  /* Quick Commerce Highlights (Swiggy / Zomato / Blinkit inspiration) */
-  --qc-orange: #FF5722; /* Primary Action / Buy Button (Zomato Red + Swiggy Orange) */
-  --qc-orange-hover: #F4511E; /* Darker orange on hover */
-  --blinkit-yellow: #FFD54F; /* Quick delivery / Highlight Yellow badge */
-  --amber-soft: #FFF8E1; /* Soft yellow tag background */
+  --amber: #E6A15C;
+  --amber-soft: #FDF6EC;
   
-  --ink-base: #121212; /* High readability text */
-  --ink-mute: #555555; /* Secondary text */
-  --ink-faint: #8DA39C; /* Muted labels */
+  --ink-base: #11221B;
+  --ink-mute: #4A635B;
+  --ink-faint: #8DA39C;
   
-  --border-subtle: #E0E8E0; /* Soft card border */
-  --shadow-card: 0 10px 24px -4px rgba(10, 38, 29, 0.08), 0 4px 6px -2px rgba(10, 38, 29, 0.04);
-  --shadow-lift: 0 16px 30px -8px rgba(255, 87, 34, 0.35);
+  --border-subtle: rgba(20, 61, 48, 0.12);
+  --shadow-card: 0 10px 25px -5px rgba(13, 46, 35, 0.08), 0 8px 10px -6px rgba(13, 46, 35, 0.04);
+  --shadow-lift: 0 20px 35px -10px rgba(217, 107, 67, 0.25);
 }
 
 * {
@@ -45,14 +42,24 @@ body {
   align-items: center;
 }
 
-#app-shell {
+#app {
   width: 100%;
   max-width: 440px;
   min-height: 100vh;
   background: var(--bg-app);
   position: relative;
   overflow-x: hidden;
-  box-shadow: 0 0 50px rgba(0,0,0,0.15);
+  box-shadow: 0 0 50px rgba(0,0,0,0.12);
+}
+
+@media (min-width: 441px) {
+  #app {
+    min-height: 90vh;
+    max-height: 92vh;
+    border-radius: 36px;
+    border: 8px solid #0D2E23;
+    overflow-y: auto;
+  }
 }
 
 .screen {
@@ -63,6 +70,8 @@ body {
   background: var(--bg-app);
   overflow-y: auto;
   padding-bottom: 90px;
+  opacity: 1;
+  transition: opacity 0.2s ease, transform 0.2s ease;
 }
 
 .screen.with-nav { padding-bottom: 100px; }
@@ -74,107 +83,88 @@ body {
   justify-content: space-between;
   align-items: center;
   padding: 16px 20px;
-  background: var(--forest-light);
-  color: #FFFFFF;
+  background: var(--surface);
   border-bottom: 1px solid var(--border-subtle);
+}
+
+.brand-left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
 }
 
 .logo-mark {
   width: 42px;
   height: 42px;
-  background: var(--blinkit-yellow);
-  color: var(--forest-dark);
+  background: var(--forest-main);
   border-radius: 14px;
   display: grid;
   place-items: center;
-  font-weight: 800;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+  box-shadow: 0 4px 12px rgba(20, 61, 48, 0.2);
 }
 
 .logo-mark.sm { width: 32px; height: 32px; border-radius: 10px; }
-.brand-title { font-size: 1.25rem; font-weight: 800; color: #FFFFFF; letter-spacing: -0.5px; }
-.brand-tag { font-size: 0.75rem; color: var(--blinkit-yellow); font-weight: 700; }
+.brand-title { font-size: 1.25rem; font-weight: 800; color: var(--forest-dark); letter-spacing: -0.5px; }
+.brand-tag { font-size: 0.75rem; color: var(--terra-deep); font-weight: 700; }
 
 /* Welcome Hub & Cards */
-.welcome-hub-header h2 { font-size: 1.4rem; font-weight: 800; color: var(--forest-dark); }
-.welcome-hub-header p { font-size: 0.85rem; color: var(--ink-mute); font-weight: 600; margin-top: 2px; }
+.journey-hub-container {
+  padding: 16px 20px;
+  background: var(--surface);
+  border-bottom-left-radius: 28px;
+  border-bottom-right-radius: 28px;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.03);
+  margin-bottom: 12px;
+}
+
+.welcome-hub-header h2 { font-size: 1.35rem; font-weight: 800; color: var(--forest-dark); }
+.welcome-hub-header p { font-size: 0.82rem; color: var(--ink-mute); font-weight: 600; margin-top: 2px; }
 
 .journey-cards-grid {
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 10px;
   margin-top: 14px;
 }
 
-.journey-card-item.animated-card {
+.journey-card-item {
   display: flex;
   align-items: center;
   gap: 14px;
-  padding: 16px 18px;
-  background: var(--surface);
-  border: 2px solid var(--border-subtle);
+  padding: 14px 16px;
+  background: var(--surface-subtle);
+  border: 1.5px solid transparent;
   border-radius: 20px;
   cursor: pointer;
-  transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+  transition: all 0.2s ease;
   text-align: left;
   width: 100%;
-  box-shadow: var(--shadow-card);
-  position: relative;
-  overflow: hidden;
 }
 
-.journey-card-item.animated-card:hover {
-  transform: translateY(-4px) scale(1.02);
-  border-color: var(--qc-orange);
-  box-shadow: var(--shadow-lift);
-  background: #FFFDFB;
+.journey-card-item:hover { border-color: var(--forest-light); background: #E1EFE7; }
+.journey-card-item.active {
+  background: var(--forest-main);
+  color: white;
+  border-color: var(--forest-main);
+  box-shadow: var(--shadow-card);
 }
 
 .journey-card-icon {
-  width: 50px;
-  height: 50px;
-  background: var(--surface-subtle);
-  border-radius: 16px;
+  width: 44px;
+  height: 44px;
+  background: white;
+  border-radius: 14px;
   display: grid;
   place-items: center;
-  font-size: 1.5rem;
-  box-shadow: inset 0 2px 4px rgba(0,0,0,0.06);
-  transition: transform 0.3s ease;
-}
-
-.journey-card-item.animated-card:hover .journey-card-icon {
-  transform: rotate(10deg) scale(1.1);
+  font-size: 1.25rem;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.05);
 }
 
 .journey-card-content { flex: 1; }
-.journey-card-content h3 { font-size: 1.05rem; font-weight: 800; color: var(--forest-dark); }
-.journey-card-content p { font-size: 0.78rem; color: var(--ink-mute); font-weight: 600; margin-top: 3px; }
-.journey-card-arrow { font-weight: 800; font-size: 1.2rem; color: var(--qc-orange); transition: transform 0.2s ease; }
-.journey-card-item.animated-card:hover .journey-card-arrow { transform: translateX(4px); }
-
-/* Quick Commerce / Highlight Badges */
-.badge-blinkit {
-  background-color: var(--blinkit-yellow);
-  color: #121212;
-  font-weight: 800;
-  font-size: 0.72rem;
-  padding: 4px 8px;
-  border-radius: 6px;
-  display: inline-block;
-}
-
-/* Bullet List Styling */
-.styled-bullet-list {
-  padding-left: 18px;
-  display: grid;
-  gap: 6px;
-}
-.styled-bullet-list li {
-  font-size: 0.85rem;
-  color: var(--ink-base);
-  font-weight: 600;
-  line-height: 1.4;
-}
+.journey-card-content h3 { font-size: 0.95rem; font-weight: 800; color: inherit; }
+.journey-card-content p { font-size: 0.75rem; opacity: 0.8; font-weight: 600; margin-top: 2px; }
+.journey-card-arrow { font-weight: 800; font-size: 1.1rem; opacity: 0.7; }
+.journey-card-item.active .journey-card-arrow { color: var(--amber); opacity: 1; }
 
 /* Product Cards */
 .prod-grid {
@@ -186,12 +176,13 @@ body {
 
 .prod-card {
   background: var(--surface);
-  border-radius: 18px;
+  border-radius: 22px;
   overflow: hidden;
   border: 1px solid var(--border-subtle);
   box-shadow: var(--shadow-card);
   display: flex;
   flex-direction: column;
+  transition: transform 0.2s ease;
 }
 
 .produce-art {
@@ -202,29 +193,49 @@ body {
   overflow: hidden;
 }
 
-.produce-img { width: 100%; height: 100%; object-fit: cover; }
+.produce-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
 .prod-body { padding: 12px; display: flex; flex-direction: column; flex: 1; }
 .prod-name { font-size: 0.9rem; font-weight: 800; color: var(--forest-dark); }
 .prod-blurb { font-size: 0.72rem; color: var(--ink-mute); font-weight: 600; margin-top: 1px; }
 
-/* Primary Action Buttons (Swiggy/Zomato QC Style) */
+.nutritional-tags-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  margin: 6px 0;
+}
+
+.nutri-badge {
+  font-size: 0.65rem;
+  font-weight: 700;
+  background: var(--surface-subtle);
+  color: var(--forest-light);
+  padding: 2px 6px;
+  border-radius: 6px;
+}
+
+/* Buttons & CTA */
 .primary-cta {
   width: 100%;
-  height: 50px;
-  background: var(--qc-orange);
+  height: 52px;
+  background: var(--terra);
   color: white;
   border: none;
-  border-radius: 16px;
+  border-radius: 18px;
   font-size: 1rem;
   font-weight: 800;
   box-shadow: var(--shadow-lift);
   cursor: pointer;
-  transition: all 0.2s ease;
+  transition: transform 0.1s ease, background 0.2s ease;
 }
-.primary-cta:hover { 
-  background: var(--qc-orange-hover);
-  transform: translateY(-2px);
-}
+
+.primary-cta:hover { background: var(--terra-deep); }
+.primary-cta:active { transform: scale(0.98); }
 
 /* Bottom Navigation */
 .bottom-nav {
@@ -253,21 +264,25 @@ body {
   font-size: 0.7rem;
   font-weight: 700;
   cursor: pointer;
+  transition: color 0.2s ease;
 }
-.nav-item.active { color: var(--forest-light); font-weight: 800; }
 
-/* Sticky Cart Bar */
+.nav-item.active { color: var(--forest-main); }
+.nav-item.active svg { stroke: var(--forest-main); stroke-width: 2.5; }
+
+/* Sticky Cart */
 .sticky-cart {
   position: absolute;
   bottom: 78px;
   left: 16px;
   right: 16px;
   background: var(--forest-dark);
-  border-radius: 18px;
+  border-radius: 20px;
   box-shadow: var(--shadow-lift);
   z-index: 90;
   overflow: hidden;
 }
+
 .sticky-cart-btn {
   width: 100%;
   background: none;
@@ -279,11 +294,18 @@ body {
   color: white;
   cursor: pointer;
 }
-.sticky-cart-cta { 
-  background: var(--qc-orange); 
-  color: #FFFFFF; 
-  font-weight: 800; 
-  font-size: 0.85rem; 
-  padding: 8px 14px; 
-  border-radius: 12px; 
+
+.sticky-cart-left { display: flex; align-items: center; gap: 12px; }
+.sticky-cart-icon { position: relative; }
+.sticky-cart-icon em {
+  position: absolute;
+  top: -6px;
+  right: -8px;
+  background: var(--terra);
+  color: white;
+  font-size: 0.65rem;
+  font-weight: 800;
+  padding: 1px 5px;
+  border-radius: 10px;
 }
+.sticky-cart-cta { background: var(--amber); color: var(--ink-base); font-weight: 800; font-size: 0.85rem; padding: 8px 14px; border-radius: 12px; }
