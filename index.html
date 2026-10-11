@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="mr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Smart Green Login</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: Arial, sans-serif;
+    }
+
+    body {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: linear-gradient(135deg, #e8f5e9, #a5d6a7);
+      padding: 20px;
+    }
+
+    .login-box {
+      background: #ffffff;
+      width: 100%;
+      max-width: 380px;
+      padding: 32px;
+      border-radius: 16px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+    }
+
+    h1 {
+      color: #1b5e20;
+      font-size: 28px;
+      text-align: center;
+      margin-bottom: 8px;
+    }
+
+    p {
+      color: #555;
+      text-align: center;
+      margin-bottom: 24px;
+    }
+
+    label {
+      display: block;
+      font-size: 14px;
+      color: #333;
+      margin-bottom: 6px;
+    }
+
+    input {
+      width: 100%;
+      padding: 12px;
+      margin-bottom: 16px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      font-size: 15px;
+    }
+
+    input:focus {
+      outline: none;
+      border-color: #2e7d32;
+    }
+
+    button {
+      width: 100%;
+      padding: 12px;
+      background: #2e7d32;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-size: 16px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background: #1b5e20;
+    }
+
+    .links {
+      margin-top: 16px;
+      text-align: center;
+      font-size: 14px;
+    }
+
+    .links a {
+      color: #2e7d32;
+      text-decoration: none;
+    }
+  </style>
+</head>
+<body>
+  <div class="login-box">
+    <h1>Smart Green</h1>
+    <p>Please login to continue</p>
+
+    <form onsubmit="event.preventDefault(); alert('Login clicked!');">
+      <label for="username">Username</label>
+      <input id="username" type="text" placeholder="Enter username" required />
+
+      <label for="password">Password</label>
+      <input id="password" type="password" placeholder="Enter password" required />
+
+      <button type="submit">Login</button>
+    </form>
+
+    <div class="links">
+      <a href="#">Forgot password?</a>
+    </div>
+  </div>
+</body>
+</html>
