@@ -2,7 +2,7 @@
   "use strict";
 
   const MOV = 200;
-  const STORAGE = "smart-green-v4";
+  const STORAGE = "smart-green-v5";
   const GRAMS_PER_KID = 250;
   const MODES = ["ondemand", "moms", "family"];
   const MODE_META = {
@@ -15,46 +15,46 @@
 
   const CATALOG = {
     Staples: [
-      { id: "rice", name: "Sona Masoori Rice", blurb: "Premium rice", pricePerKg: 170, unit: "kg", hue: "#f0e6c8", accent: "#b89b54", photo: img("photo-1586201375761-83865001e31c") },
-      { id: "atta", name: "Whole Wheat Atta", blurb: "Stone-ground", pricePerKg: 54, unit: "kg", hue: "#e8d4a8", accent: "#8d6e3a", photo: img("photo-1574323347407-f5e1ad6d020b") },
-      { id: "dal", name: "Toor Dal", blurb: "Protein staple", pricePerKg: 140, unit: "kg", hue: "#f3d27a", accent: "#b8860b", photo: img("photo-1516684732162-798a0062be99") },
-      { id: "oil", name: "Cold-Pressed Oil", blurb: "Kitchen essential", pricePerKg: 220, unit: "L", hue: "#f7e38a", accent: "#c9a227", photo: img("photo-1474979266404-7eaacbcd87c5") },
+      { id: "rice", name: "Sona Masoori Rice", blurb: "Premium rice", pricePerKg: 170, unit: "kg", hue: "#f0e6c8", accent: "#b89b54", photo: img("photo-1586201375761-83865001e31c"), nutri: "Carbs & Energy · Low glycemic index" },
+      { id: "atta", name: "Whole Wheat Atta", blurb: "Stone-ground", pricePerKg: 54, unit: "kg", hue: "#e8d4a8", accent: "#8d6e3a", photo: img("photo-1574323347407-f5e1ad6d020b"), nutri: "High Dietary Fiber · Good for Digestion" },
+      { id: "dal", name: "Toor Dal", blurb: "Protein staple", pricePerKg: 140, unit: "kg", hue: "#f3d27a", accent: "#b8860b", photo: img("photo-1516684732162-798a0062be99"), nutri: "Plant Protein & Iron · Heart Healthy" },
+      { id: "oil", name: "Cold-Pressed Oil", blurb: "Kitchen essential", pricePerKg: 220, unit: "L", hue: "#f7e38a", accent: "#c9a227", photo: img("photo-1474979266404-7eaacbcd87c5"), nutri: "Healthy Fats · Zero Trans Fat" },
     ],
     Veggies: [
-      { id: "lady-finger", name: "Lady Finger", blurb: "Farm fresh", pricePerKg: 60, hue: "#9aaa5a", accent: "#6b7a32", photo: "https://images.pexels.com/photos/1656666/pexels-photo-1656666.jpeg?auto=compress&cs=tinysrgb&w=600" },
-      { id: "potato", name: "Potato", blurb: "Everyday staple", pricePerKg: 36, hue: "#d4a35a", accent: "#8a6230", photo: img("photo-1518977676601-b53f82aba655") },
-      { id: "tomato", name: "Tomato", blurb: "Vine ripened", pricePerKg: 48, hue: "#d4543a", accent: "#9a2f1c", photo: img("photo-1592924357228-91a4daadcfea") },
-      { id: "carrot", name: "Carrot", blurb: "Sweet & crisp", pricePerKg: 52, hue: "#e07a2f", accent: "#a04a12", photo: img("photo-1598170845058-32b9d6a5da37") },
-      { id: "beans", name: "French Beans", blurb: "Tender pods", pricePerKg: 70, hue: "#8a9e4a", accent: "#5a6b28", photo: img("photo-1567375698348-5d9d1edb2e83") },
-      { id: "capsicum", name: "Capsicum", blurb: "Crunchy & mild", pricePerKg: 80, hue: "#c9a227", accent: "#8a6a12", photo: img("photo-1563565375-f3fdfdbefa83") },
+      { id: "lady-finger", name: "Lady Finger", blurb: "Farm fresh", pricePerKg: 60, hue: "#9aaa5a", accent: "#6b7a32", photo: "https://images.pexels.com/photos/1656666/pexels-photo-1656666.jpeg?auto=compress&cs=tinysrgb&w=600", nutri: "Rich in Folate & Vitamin C · Diabetes Friendly", bpSafe: true },
+      { id: "potato", name: "Potato", blurb: "Everyday staple", pricePerKg: 36, hue: "#d4a35a", accent: "#8a6230", photo: img("photo-1518977676601-b53f82aba655"), nutri: "Potassium & Energy · ⚠️ Moderate starch (Caution for strict diabetes)", diabetesWarn: true },
+      { id: "tomato", name: "Tomato", blurb: "Vine ripened", pricePerKg: 48, hue: "#d4543a", accent: "#9a2f1c", photo: img("photo-1592924357228-91a4daadcfea"), nutri: "Lycopene & Antioxidants · Great for Skin & Heart", bpSafe: true },
+      { id: "carrot", name: "Carrot", blurb: "Sweet & crisp", pricePerKg: 52, hue: "#e07a2f", accent: "#a04a12", photo: img("photo-1598170845058-32b9d6a5da37"), nutri: "Beta-Carotene & Vitamin A · Supports Vision", bpSafe: true },
+      { id: "beans", name: "French Beans", blurb: "Tender pods", pricePerKg: 70, hue: "#8a9e4a", accent: "#5a6b28", photo: img("photo-1567375698348-5d9d1edb2e83"), nutri: "Dietary Fiber & Plant Iron · Blood Sugar Regulation", bpSafe: true },
+      { id: "capsicum", name: "Capsicum", blurb: "Crunchy & mild", pricePerKg: 80, hue: "#c9a227", accent: "#8a6a12", photo: img("photo-1563565375-f3fdfdbefa83"), nutri: "Vitamin C & Metabolism Boost", bpSafe: true },
     ],
     Fruits: [
-      { id: "banana", name: "Banana", blurb: "Energy fruit", pricePerKg: 55, hue: "#ffe082", accent: "#f9a825", photo: img("photo-1571771894821-ce9b6c11b08e") },
-      { id: "apple", name: "Apple", blurb: "Crisp & juicy", pricePerKg: 180, hue: "#e57373", accent: "#c62828", photo: img("photo-1567306226416-28f0efdc88ce") },
-      { id: "papaya", name: "Papaya", blurb: "Vitamin rich", pricePerKg: 45, hue: "#ffb74d", accent: "#ef6c00", photo: img("photo-1517282009859-f000ec3b26fe") },
-      { id: "orange", name: "Orange", blurb: "Fresh citrus", pricePerKg: 90, hue: "#ffa726", accent: "#ef6c00", photo: img("photo-1557800636-894a64c1696f") },
+      { id: "banana", name: "Banana", blurb: "Energy fruit", pricePerKg: 55, hue: "#ffe082", accent: "#f9a825", photo: img("photo-1571771894821-ce9b6c11b08e"), nutri: "Potassium & Instant Energy" },
+      { id: "apple", name: "Apple", blurb: "Crisp & juicy", pricePerKg: 180, hue: "#e57373", accent: "#c62828", photo: img("photo-1567306226416-28f0efdc88ce"), nutri: "Pectin Fiber & Low GI · Heart Friendly" },
+      { id: "papaya", name: "Papaya", blurb: "Vitamin rich", pricePerKg: 45, hue: "#ffb74d", accent: "#ef6c00", photo: img("photo-1517282009859-f000ec3b26fe"), nutri: "Papain Enzyme · Excellent for Digestion" },
+      { id: "orange", name: "Orange", blurb: "Fresh citrus", pricePerKg: 90, hue: "#ffa726", accent: "#ef6c00", photo: img("photo-1557800636-894a64c1696f"), nutri: "High Vitamin C & Immunity Support" },
     ],
     Sprouts: [
-      { id: "moong", name: "Moong Sprouts", blurb: "Protein pack", pricePerKg: 120, hue: "#c4b454", accent: "#8a7a28", sproutable: true, photo: img("photo-1540420773420-3366772f4999") },
-      { id: "chana", name: "Chana Sprouts", blurb: "Hearty sprouts", pricePerKg: 110, hue: "#c4a35a", accent: "#7a5a28", sproutable: true, photo: img("photo-1615485290382-441e4d049cb5") },
-      { id: "mixed", name: "Mixed Sprouts", blurb: "Variety pack", pricePerKg: 130, hue: "#b8a45a", accent: "#7a6528", sproutable: true, photo: img("photo-1512621776951-a57141f2eefd") },
-      { id: "methi", name: "Methi Sprouts", blurb: "Iron boost", pricePerKg: 125, hue: "#a8b45a", accent: "#6a7528", sproutable: true, photo: img("photo-1508747703725-719777637510") },
+      { id: "moong", name: "Moong Sprouts", blurb: "Protein pack", pricePerKg: 120, hue: "#c4b454", accent: "#8a7a28", sproutable: true, photo: img("photo-1540420773420-3366772f4999"), nutri: "High Protein & Live Enzymes · Muscle Repair" },
+      { id: "chana", name: "Chana Sprouts", blurb: "Hearty sprouts", pricePerKg: 110, hue: "#c4a35a", accent: "#7a5a28", sproutable: true, photo: img("photo-1615485290382-441e4d049cb5"), nutri: "Iron & Sustained Energy · Low GI" },
+      { id: "mixed", name: "Mixed Sprouts", blurb: "Variety pack", pricePerKg: 130, hue: "#b8a45a", accent: "#7a6528", sproutable: true, photo: img("photo-1512621776951-a57141f2eefd"), nutri: "Complete Amino Acid Profile & Fiber" },
+      { id: "methi", name: "Methi Sprouts", blurb: "Iron boost", pricePerKg: 125, hue: "#a8b45a", accent: "#6a7528", sproutable: true, photo: img("photo-1508747703725-719777637510"), nutri: "Blood Sugar Control & Iron Rich · Anti-Diabetic" },
     ],
     Aromatics: [
-      { id: "coriander", name: "Coriander", blurb: "Fresh bunch", pricePerKg: 40, hue: "#a8b86a", accent: "#6a7a32", photo: img("photo-1459411621453-7b03977f4bfc") },
-      { id: "mint", name: "Mint Bunch", blurb: "Cool & aromatic", pricePerKg: 50, hue: "#b0c070", accent: "#708030", photo: img("photo-1622206151226-18ca2c9ab4a1") },
-      { id: "ginger", name: "Ginger", blurb: "Kitchen essential", pricePerKg: 160, hue: "#d7ccc8", accent: "#8d6e63", photo: img("photo-1599940824399-b87987ceb72a") },
-      { id: "lemon", name: "Lemon", blurb: "Zesty finish", pricePerKg: 90, hue: "#e8d86a", accent: "#b8a020", photo: img("photo-1590502593747-42a996133562") },
+      { id: "coriander", name: "Coriander", blurb: "Fresh bunch", pricePerKg: 40, hue: "#a8b86a", accent: "#6a7a32", photo: img("photo-1459411621453-7b03977f4bfc"), nutri: "Detoxifying & Antioxidant Rich" },
+      { id: "mint", name: "Mint Bunch", blurb: "Cool & aromatic", pricePerKg: 50, hue: "#b0c070", accent: "#708030", photo: img("photo-1622206151226-18ca2c9ab4a1"), nutri: "Soothing Digestion & Refreshing" },
+      { id: "ginger", name: "Ginger", blurb: "Kitchen essential", pricePerKg: 160, hue: "#d7ccc8", accent: "#8d6e63", photo: img("photo-1599940824399-b87987ceb72a"), nutri: "Anti-inflammatory & Immunity Support" },
+      { id: "lemon", name: "Lemon", blurb: "Zesty finish", pricePerKg: 90, hue: "#e8d86a", accent: "#b8a020", photo: img("photo-1590502593747-42a996133562"), nutri: "Vitamin C & Alkalizing Body Balance" },
     ],
   };
 
   const MOMS_VEG = [
-    { id: "tf-lady", name: "Lady Finger Kit", price: 45, hue: "#9aaa5a", accent: "#6b7a32", photo: "https://images.pexels.com/photos/1656666/pexels-photo-1656666.jpeg?auto=compress&cs=tinysrgb&w=600" },
-    { id: "tf-spin", name: "Spinach Kit", price: 35, hue: "#8a9e5a", accent: "#556b2f", photo: img("photo-1576045057995-568f588f82fb") },
-    { id: "tf-pot", name: "Potato Kit", price: 30, hue: "#d4a35a", accent: "#8a6230", photo: img("photo-1518977676601-b53f82aba655") },
-    { id: "tf-tom", name: "Tomato Kit", price: 40, hue: "#d4543a", accent: "#9a2f1c", photo: img("photo-1592924357228-91a4daadcfea") },
-    { id: "tf-carrot", name: "Carrot Kit", price: 38, hue: "#e07a2f", accent: "#a04a12", photo: img("photo-1598170845058-32b9d6a5da37") },
-    { id: "tf-beans", name: "Beans Kit", price: 42, hue: "#8a9e4a", accent: "#5a6b28", photo: img("photo-1622206151226-18ca2c9ab4a1") },
+    { id: "tf-lady", name: "Lady Finger Kit", price: 45, hue: "#9aaa5a", accent: "#6b7a32", photo: "https://images.pexels.com/photos/1656666/pexels-photo-1656666.jpeg?auto=compress&cs=tinysrgb&w=600", nutri: "Folate & Vitamin C for Brain Development" },
+    { id: "tf-spin", name: "Spinach Kit", price: 35, hue: "#8a9e5a", accent: "#556b2f", photo: img("photo-1576045057995-568f588f82fb"), nutri: "Iron & Calcium for Bone & Blood Strength" },
+    { id: "tf-pot", name: "Potato Kit", price: 30, hue: "#d4a35a", accent: "#8a6230", photo: img("photo-1518977676601-b53f82aba655"), nutri: "Energy-dense Carbs for Active Kids" },
+    { id: "tf-tom", name: "Tomato Kit", price: 40, hue: "#d4543a", accent: "#9a2f1c", photo: img("photo-1592924357228-91a4daadcfea"), nutri: "Vitamin C & Antioxidants for Immunity" },
+    { id: "tf-carrot", name: "Carrot Kit", price: 38, hue: "#e07a2f", accent: "#a04a12", photo: img("photo-1598170845058-32b9d6a5da37"), nutri: "Vitamin A for Sharp Vision & Growth" },
+    { id: "tf-beans", name: "Beans Kit", price: 42, hue: "#8a9e4a", accent: "#5a6b28", photo: img("photo-1622206151226-18ca2c9ab4a1"), nutri: "Dietary Fiber & Plant Protein for Muscles" },
   ];
   const MOMS_EXTRAS = [
     { id: "extra-salad", name: "Extra Salad", price: 40, kind: "salad" },
@@ -62,9 +62,9 @@
     { id: "extra-fruit", name: "Premium Fruit Basket", price: 199, kind: "fruit" },
   ];
   const FAMILY_STAPLES = [
-    { id: "onion", name: "Onion", pricePerKg: 40, photo: img("photo-1518977956812-cd3dbadaafcd"), hue: "#e8d4c8", accent: "#8d6e63" },
-    { id: "potato", name: "Potato", pricePerKg: 36, photo: img("photo-1518977676601-b53f82aba655"), hue: "#d4a35a", accent: "#8a6230" },
-    { id: "tomato", name: "Tomato", pricePerKg: 48, photo: img("photo-1592924357228-91a4daadcfea"), hue: "#d4543a", accent: "#9a2f1c" },
+    { id: "onion", name: "Onion", pricePerKg: 40, photo: img("photo-1518977956812-cd3dbadaafcd"), hue: "#e8d4c8", accent: "#8d6e63", nutri: "Quercetin & Blood Circulation Support" },
+    { id: "potato", name: "Potato", pricePerKg: 36, photo: img("photo-1518977676601-b53f82aba655"), hue: "#d4a35a", accent: "#8a6230", nutri: "Potassium & Energy Staple" },
+    { id: "tomato", name: "Tomato", pricePerKg: 48, photo: img("photo-1592924357228-91a4daadcfea"), hue: "#d4543a", accent: "#9a2f1c", nutri: "Heart-Healthy Lycopene" },
   ];
   const ORDERS = [
     { id: "SG-2401", date: "Fri, 3 Oct", total: 486, status: "In-Transit", items: "Weekly Basket · 12 items" },
@@ -84,6 +84,8 @@
     homeTab: "ondemand",
     odCategory: "Veggies",
     kids: 2,
+    childMode: "double", // 'double' or 'separate'
+    child2Veggies: {},
     cart: [],
     savedLater: [],
     odDraft: {},
@@ -138,7 +140,7 @@
     try {
       localStorage.setItem(STORAGE, JSON.stringify({
         phone: state.phone, user: state.user, locationGranted: state.locationGranted,
-        cart: state.cart, savedLater: state.savedLater, kids: state.kids, family: state.family,
+        cart: state.cart, savedLater: state.savedLater, kids: state.kids, childMode: state.childMode, family: state.family,
         momsExtras: state.momsExtras, delivery: state.delivery, homeTab: state.homeTab, odDraft: state.odDraft,
       }));
     } catch (_) {
@@ -153,7 +155,7 @@
 
   function load() {
     try {
-      const raw = localStorage.getItem(STORAGE) || localStorage.getItem("smart-green-v3");
+      const raw = localStorage.getItem(STORAGE) || localStorage.getItem("smart-green-v4");
       if (!raw) return;
       const d = JSON.parse(raw);
       if (d.phone) state.phone = d.phone;
@@ -162,6 +164,7 @@
       if (Array.isArray(d.cart)) state.cart = d.cart;
       if (Array.isArray(d.savedLater)) state.savedLater = d.savedLater;
       if (d.kids) state.kids = d.kids;
+      if (d.childMode) state.childMode = d.childMode;
       if (d.family) {
         state.family = { ...state.family, ...d.family, staples: { ...state.family.staples, ...(d.family.staples || {}) }, leafy: { ...state.family.leafy, ...(d.family.leafy || {}) }, sprouts: { ...state.family.sprouts, ...(d.family.sprouts || {}) }, extras: { ...state.family.extras, ...(d.family.extras || {}) } };
       }
@@ -444,7 +447,7 @@
       const n = momsVegSelected().length;
       if (n > 0 && n < 6) cards.push({ title: "Complete your kit", body: `You’ve selected ${n} veggie kits. You can choose ${6 - n} more.` });
       if (n >= 1) cards.push({ title: "Free salads added", body: `${Math.min(n, 6)} free salads were added automatically (1:1, max 6).` });
-      if (state.kids >= 2) cards.push({ title: "Quantities adjusted", body: `Portions automatically scale for ${state.kids} children.` });
+      if (state.kids >= 2) cards.push({ title: "Multi-Child Mode Active", body: `Portions scale for ${state.kids} kids (${state.childMode === "separate" ? "Separate preferences" : "Double exact kits"}).` });
     }
     if (mode === "family") {
       const leafyN = Object.values(state.family.leafy).filter(Boolean).length;
@@ -561,20 +564,20 @@
 
         <button type="button" data-hub-mode="moms" class="w-full text-left p-4 rounded-2xl bg-white border border-black/10 shadow-card card-pop" style="display:block;">
           <div class="flex items-center justify-between">
-            <span class="text-xs font-extrabold uppercase tracking-wider text-amber-deep">👧 Kids Special</span>
+            <span class="text-xs font-extrabold uppercase tracking-wider text-amber-deep">👧 Kids Special & Tiffins</span>
             <span class="text-terra font-extrabold text-sm">Build Kit →</span>
           </div>
           <h2 class="font-display text-xl font-semibold mt-1">Mom’s Kitchen</h2>
-          <p class="mt-1 text-sm font-semibold text-ink-mute">Weekly kids’ veggie & tiffin kits scalable per child. Includes <strong>FREE Salads & Aromatics</strong>.</p>
+          <p class="mt-1 text-sm font-semibold text-ink-mute">Weekly kid veggie kits with multi-child customizer & <strong>FREE Salads & Aromatics</strong>.</p>
         </button>
 
         <button type="button" data-hub-mode="family" class="w-full text-left p-4 rounded-2xl bg-white border border-black/10 shadow-card card-pop" style="display:block;">
           <div class="flex items-center justify-between">
-            <span class="text-xs font-extrabold uppercase tracking-wider text-amber-deep">👨‍👩‍👧‍👦 Weekly Basket</span>
+            <span class="text-xs font-extrabold uppercase tracking-wider text-amber-deep">🩺 Health-Smart Family Basket</span>
             <span class="text-terra font-extrabold text-sm">Customize →</span>
           </div>
           <h2 class="font-display text-xl font-semibold mt-1">Family Kitchen</h2>
-          <p class="mt-1 text-sm font-semibold text-ink-mute">Complete weekly family basket with adjustable staples, sorted veggies, leafy greens & sprouts.</p>
+          <p class="mt-1 text-sm font-semibold text-ink-mute">Complete weekly basket with <strong>Diabetes/BP health tags</strong> & live nutritional breakdowns.</p>
         </button>
       </div>
       ${navBar("hub")}
@@ -610,6 +613,7 @@
         <div class="prod-body">
           <h3 class="prod-name">${item.name}</h3>
           <p class="prod-selected">Selected: <strong>${formatGrams(draft.weight)} · ₹${price}</strong></p>
+          ${item.nutri ? `<p class="text-[11px] font-bold text-sage" style="color:var(--sage)">🌿 ${item.nutri}</p>` : ""}
           <div class="variant-row">${[250,500,1000].map((g) => `<button type="button" class="qty-chip ${draft.weight === g ? "active" : ""}" data-od-weight="${item.id}" data-g="${g}">${formatGrams(g)}</button>`).join("")}</div>
           <div class="attr-row">
             <button type="button" class="switch ${draft.cut ? "on" : ""}" data-od-attr="${item.id}" data-attr="cut"><span class="track"><span class="knob"></span></span>Cut</button>
@@ -633,6 +637,7 @@
       <div class="prod-body">
         <h3 class="prod-name">${item.name}</h3>
         <p class="prod-blurb">${item.blurb || "Fresh produce"}</p>
+        ${item.nutri ? `<p class="text-[11px] font-bold text-sage" style="color:var(--sage)">🌿 ${item.nutri}</p>` : ""}
         <div class="variant-row">${[250,500,1000].map((g) => `<button type="button" class="qty-chip ${draft.weight === g ? "active" : ""}" data-od-weight="${item.id}" data-g="${g}">${formatGrams(g)}</button>`).join("")}</div>
         <div class="attr-row">
           <button type="button" class="switch ${draft.cut ? "on" : ""}" data-od-attr="${item.id}" data-attr="cut"><span class="track"><span class="knob"></span></span>Cut</button>
@@ -676,21 +681,32 @@
     const freeSalads = Math.min(n, 6);
     const g = state.kids * GRAMS_PER_KID;
     return paneShell("moms", `
-      <div class="mode-hero"><h2>Mom’s Kitchen</h2><p>Smart weekly veggie kits for your kids</p></div>
+      <div class="mode-hero"><h2>Mom’s Kitchen</h2><p>Smart weekly veggie kits & nutritional tiffins for kids</p></div>
       <section class="panel">
-        <p class="panel-kicker">Children</p><p class="panel-title">How many children?</p>
+        <p class="panel-kicker">Children Setup</p><p class="panel-title">How many children?</p>
         <div class="kids-stepper">
           <button type="button" data-kids="-1" class="step-btn">−</button>
           <div class="kids-count"><strong>${state.kids}</strong><span>${state.kids === 1 ? "child" : "children"}</span></div>
           <button type="button" data-kids="1" class="step-btn">+</button>
         </div>
-        <p class="auto-note">Your quantities automatically adjust for ${state.kids} ${state.kids === 1 ? "child" : "children"} · ${formatGrams(g)} per kit</p>
+        <p class="auto-note">Quantities auto-scale to ${formatGrams(g)} per kit for ${state.kids} kids</p>
+        
+        ${state.kids > 1 ? `
+          <div class="mt-4 pt-3 border-t border-black/5">
+            <p class="text-xs font-extrabold uppercase text-ink-mute mb-2">Multi-Child Kit Preference</p>
+            <div class="seg w-full" style="display:flex">
+              <button type="button" data-child-mode="double" class="flex-1 ${state.childMode === "double" ? "on" : ""}">Double exact same kits</button>
+              <button type="button" data-child-mode="separate" class="flex-1 ${state.childMode === "separate" ? "on" : ""}">Customize Child 2 separate</button>
+            </div>
+          </div>
+        ` : ""}
       </section>
       <section class="included-panel">
         <div class="included-head"><h3>Your Standard Kit</h3><span class="badge-included">✓ FREE INCLUDED</span></div>
         <ul class="included-list">
-          <li>✓ 6 Veggie Kits</li><li>✓ Automatically adjusted quantities</li>
-          <li>✓ Free Salad allocation (1:1, max 6)</li><li>✓ 1 Free Aromatic Kit</li>
+          <li>✓ 6 Veggie Kits with Real-Time Nutritional Benefits</li>
+          <li>✓ Free Salad allocation (1:1 with veggies, max 6)</li>
+          <li>✓ 1 Free Aromatic Kit for kid-friendly seasoning</li>
         </ul>
       </section>
       <section class="panel">
@@ -702,7 +718,7 @@
             <div class="produce-art mini">${producePhoto(item)}</div>
             ${on ? `<span class="sel-check">✓</span>` : ""}
             <p class="kit-name">${item.name}</p>
-            <p class="kit-meta"><span class="badge-included">Included</span> · ${formatGrams(g)}</p>
+            <p class="kit-meta text-[10px]" style="color:var(--terra-deep)">🌱 ${item.nutri}</p>
           </button>`;
         }).join("")}</div>
       </section>
@@ -737,10 +753,10 @@
     const value = familyBasketValue();
     const leafyPhotos = { spinach: img("photo-1576045057995-568f588f82fb"), methi: img("photo-1508747703725-719777637510"), dill: img("photo-1459411621453-7b03977f4bfc") };
     return paneShell("family", `
-      <div class="mode-hero"><h2>Family Kitchen</h2><p>Build your weekly family basket</p></div>
+      <div class="mode-hero"><h2>Family Kitchen</h2><p>Health-Smart Weekly Family Basket with Medical & Dietary Guidance</p></div>
       <section class="included-panel">
         <div class="included-head"><h3>Your Standard Basket</h3><span class="badge-included">✓ Included</span></div>
-        <div class="staple-summary">${FAMILY_STAPLES.map((s) => `<div><span>${s.name}</span><strong>${state.family.staples[s.id]}kg</strong></div>`).join("")}</div>
+        <div class="staple-summary">${FAMILY_STAPLES.map((s) => `<div><span>${s.name} (${s.nutri})</span><strong>${state.family.staples[s.id]}kg</strong></div>`).join("")}</div>
         <button type="button" id="toggleProp" class="ghost-cta">${state.showPropEditor ? "Hide proportion editor" : "Adjust Proportion"}</button>
         <p class="basket-value">Basket value <strong>₹${value}</strong></p>
       </section>
@@ -751,15 +767,18 @@
           <button type="button" data-staple="${s.id}" data-d="0.5">+</button></div></div>`).join("")}
       </section>` : ""}
       <section class="panel">
-        <div class="panel-row"><div><p class="panel-kicker">2. Sorted Veggies</p><h3 class="panel-title">Choose up to 6</h3></div>
+        <div class="panel-row"><div><p class="panel-kicker">2. Sorted Veggies (Health-Smart)</p><h3 class="panel-title">Choose up to 6</h3></div>
           <span class="count-pill ${vegN >= 6 ? "ok" : ""}">${vegN} / 6</span></div>
         <div class="kit-grid">${CATALOG.Veggies.slice(0, 6).map((v) => {
           const on = !!state.family.veggies[v.id];
           const prefs = state.family.veggies[v.id] || {};
           return `<div class="kit-card ${on ? "selected" : ""}"><button type="button" data-fam-veg="${v.id}" class="kit-hit">
             <div class="produce-art mini">${producePhoto(v)}</div>${on ? `<span class="sel-check">✓</span>` : ""}
-            <p class="kit-name">${v.name}</p><p class="kit-meta">${on ? '<span class="badge-included">Selected</span>' : "Tap to add"}</p></button>
-            ${on ? `<div class="attr-row tight">
+            <p class="kit-name">${v.name}</p>
+            <p class="kit-meta text-[10px]" style="color:var(--ink-mute)">${v.nutri}</p>
+            ${v.diabetesWarn ? `<span class="mt-1 inline-block text-[9px] font-extrabold px-1.5 py-0.5 rounded bg-amber-soft text-amber-deep">⚠️ Caution for strict Diabetes</span>` : `<span class="mt-1 inline-block text-[9px] font-extrabold px-1.5 py-0.5 rounded" style="background:#e7f0e4;color:var(--sage)">✅ Heart & BP Friendly</span>`}
+            </button>
+            ${on ? `<div class="attr-row tight mt-1">
               <button type="button" class="switch ${prefs.cut ? "on" : ""}" data-fam-attr="${v.id}" data-attr="cut"><span class="track"><span class="knob"></span></span>Cut</button>
               <button type="button" class="switch ${prefs.washed ? "on" : ""}" data-fam-attr="${v.id}" data-attr="washed"><span class="track"><span class="knob"></span></span>Washed</button>
             </div>` : ""}</div>`;
@@ -774,7 +793,7 @@
             <div class="produce-art mini">${producePhoto({ id: k, name: k, photo: leafyPhotos[k], hue: "#cfe0b8", accent: "#8a9e5a" })}</div>
             ${on ? `<span class="sel-check">✓</span>` : ""}
             <p class="kit-name">${k[0].toUpperCase() + k.slice(1)}</p>
-            <p class="kit-meta">${on ? '<span class="badge-included">Selected</span>' : "Tap to add"}</p>
+            <p class="kit-meta text-[9px] text-sage">Rich in Iron & Fiber</p>
           </button>`).join("")}</div>
       </section>
       <section class="panel">
@@ -789,7 +808,7 @@
           return `<button type="button" data-fam-sprout="${k}" class="kit-card ${on ? "selected" : ""}">
             <div class="produce-art mini">${producePhoto(meta)}</div>${on ? `<span class="sel-check">✓</span>` : ""}
             <p class="kit-name">${k[0].toUpperCase() + k.slice(1)}</p>
-            <p class="kit-meta">${state.family.sproutsMode === "sprouted" ? "Sprouted" : "Raw"}</p></button>`;
+            <p class="kit-meta text-[9px]" style="color:var(--terra-deep)">${meta.nutri || "High Protein"}</p></button>`;
         }).join("")}</div>
       </section>
       <section class="included-panel soft">
@@ -1409,6 +1428,12 @@
           }
         }
         ensureMomsFreebies(); save(); render();
+      });
+    });
+    screensEl.querySelectorAll("[data-child-mode]").forEach((btn) => {
+      btn.addEventListener("click", () => {
+        state.childMode = btn.dataset.childMode;
+        save(); render();
       });
     });
     screensEl.querySelectorAll("[data-moms-toggle]").forEach((btn) => {
